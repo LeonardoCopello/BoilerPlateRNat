@@ -1,10 +1,8 @@
 import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
-import { appReducer } from './appMobile'
+import appReducer from '@store/appMobile'
 
-// import clientsModuleReducer from '@mobtex/core-global/src/store/clients/clientsModule'
-
-export const storeAppMobile = configureStore({
+const storeAppMobile = configureStore({
     reducer: {
         boilerplate: appReducer,
     },

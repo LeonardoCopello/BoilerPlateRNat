@@ -7,6 +7,7 @@ export const boilerplateInitialState: IBoilerplateInitialState = {
     list: [],
 }
 
+
 export const appReducer = createSlice({
     name: 'boilerplate',
     initialState: boilerplateInitialState,
