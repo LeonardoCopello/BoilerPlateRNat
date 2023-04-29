@@ -2,20 +2,25 @@ import React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { Login } from '@screens/Unauth/Access/Login'
+import { Forgot } from '@screens/Unauth/Access/Forgot'
+import { AuthRoutes } from './types/RoutesLogin'
 
 export const RoutesLogin = () => {
 
-    const Stack = createNativeStackNavigator()
-    console.log('entrou Routes')
+    const { Navigator, Screen} = createNativeStackNavigator<AuthRoutes>()
 
     return (
         <NavigationContainer>
-            <Stack.Navigator>
-                <Stack.Screen 
+            <Navigator>
+                <Screen 
                     name="Login"
                     component={Login}
                 />
-            </Stack.Navigator>
+                <Screen 
+                    name="Forgot"
+                    component={Forgot}
+                />
+            </Navigator>
         </NavigationContainer>
     )
 }

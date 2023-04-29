@@ -1,8 +1,7 @@
 import React from 'react'
-import { SafeAreaView } from 'react-native'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
-import { ThemeProvider, Button } from '@rneui/themed'
+import { ThemeProvider } from '@rneui/themed'
 import { RootState, useAppSelector } from '@store/Reducers'
 import { RoutesLogin } from '@routes/RoutesLogin'
 
