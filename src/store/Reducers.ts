@@ -1,10 +1,12 @@
 import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
-import appReducer from '@store/appMobile'
+// import themeApp from './theme/themeApp'
+import themeApp from '@store/theme/themeApp'
+
 
 const storeAppMobile = configureStore({
     reducer: {
-        boilerplate: appReducer,
+        theme: themeApp
     },
 })
 

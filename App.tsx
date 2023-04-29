@@ -1,49 +1,40 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { SafeAreaView, Text } from 'react-native'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
-import { Provider } from 'react-redux'
-import storeAppMobile from '@store/appMobile'
-import { ThemeProvider, createTheme, Button, useThemeMode } from '@rneui/themed'
-import { light, dark } from '@themes/light'
+import { ThemeProvider, Button } from '@rneui/themed'
+import { RootState, useAppDispatch, useAppSelector } from '@store/Reducers'
+import { setToggleTheme } from '@store/theme/themeApp'
 
 
 
 
 export const App = () => {
-    const { mode, setMode } = useThemeMode()
-    const [ theme, setTheme ] = useState(light)
+    const dispatch = useAppDispatch()
 
+    const { currentTheme } = useAppSelector(
+        (state: RootState) => state.theme )
+    
     const toggleTheme = () => {
-        if (theme === light) {
-            setTheme(dark)
-        } else {
-            setTheme(light)
-        }
+        dispatch(setToggleTheme(currentTheme))
     }
 
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
-            {/* <Provider store={storeAppMobile}> */}
-            <ThemeProvider theme={theme}>
+            <ThemeProvider theme={currentTheme}>
                 <SafeAreaProvider>
                     <SafeAreaView>                        
                         <Button 
                             title='toggle'
-                            // containerStyle={{ height: 200 }}
-                            buttonStyle={{ backgroundColor: theme.lightColors?.accent}} 
+                            buttonStyle={{ backgroundColor: currentTheme?.lightColors?.accent}} 
                             onPress={toggleTheme}
                         />
-
-
-                        <Button title='teste' buttonStyle={{ backgroundColor: theme.lightColors?.primary}}/>
+                        <Button title='teste' buttonStyle={{ backgroundColor: currentTheme?.lightColors?.primary}}/>
                         <Button 
                             title='mode'
-                            // containerStyle={{ height: 200 }}
-                            buttonStyle={{ backgroundColor: theme.lightColors?.accent}} 
-                            // onPress={() => setMode('light')}
+                            buttonStyle={{ backgroundColor: currentTheme?.lightColors?.accent}} 
                         />
-                        <Button title='teste' buttonStyle={{ backgroundColor: theme.lightColors?.grey0}}/>
+                        <Button title='teste' buttonStyle={{ backgroundColor: currentTheme?.lightColors?.grey0}}/>
 
                     </SafeAreaView>
                 </SafeAreaProvider>
