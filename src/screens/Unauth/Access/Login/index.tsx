@@ -7,8 +7,29 @@ import { useNavigation } from '@react-navigation/native'
 import { AuthNavigatorRoutesProps } from '@routes/types/RoutesLogin'
 import { HeaderDefault } from '@components/HeaderDefault'
 import { MainContainer } from '@components/Containers'
+import { InputTextForm } from '@components/InputText/InputTextForm'
+import { SubmitHandler, useForm } from 'react-hook-form'
+
 
 export const Login = () => {
+
+    interface ILoginPros {
+        userName: string,
+        password: string
+    }
+
+    const {
+        control,
+        handleSubmit,
+        setValue,
+        formState: { errors },
+    } = useForm<ILoginPros>({
+        defaultValues: {
+        //   year: '2023'.toString(),
+        },
+        // resolver: yupResolver(CertificateItemsSchema),
+    })
+
     const navigation = useNavigation<AuthNavigatorRoutesProps>()
 
     const dispatch = useAppDispatch()
@@ -28,6 +49,22 @@ export const Login = () => {
                 title={'Login'}
                 leftComponent={{ iconType: 'drawer' }}
                 rightComponent={{ iconType: 'refresh', onPress: handleNavigate }}
+            />
+            <InputTextForm
+                errors={errors}
+                control={control}
+                name="userName"
+                label="Usuário"
+                disabled={false}
+                trim
+            />
+            <InputTextForm
+                errors={errors}
+                control={control}
+                name="password"
+                label="Senha"
+                disabled={false}
+                trim
             />
             <View style={{ flex: 1 }}>
                 <Button 
