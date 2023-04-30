@@ -5,6 +5,8 @@ import { RootState, useAppDispatch, useAppSelector } from '@store/Reducers'
 import { setToggleTheme } from '@store/theme/themeApp'
 import { useNavigation } from '@react-navigation/native'
 import { AuthNavigatorRoutesProps } from '@routes/types/RoutesLogin'
+import { HeaderDefault } from '@components/HeaderDefault'
+import { MainContainer } from '@components/Containers'
 
 export const Login = () => {
     const navigation = useNavigation<AuthNavigatorRoutesProps>()
@@ -21,17 +23,24 @@ export const Login = () => {
         navigation.navigate('Forgot', { userLogin: 'Leo'})
     }
     return (
-        <View style={{ flex: 1 }}>
-            <Button 
-                title='toggle Theme'
-                buttonStyle={{ backgroundColor: currentTheme.lightColors.accent}} 
-                onPress={toggleTheme}
+        <MainContainer>
+            <HeaderDefault
+                title={'Login'}
+                leftComponent={{ iconType: 'drawer' }}
+                rightComponent={{ iconType: 'refresh', onPress: handleNavigate }}
             />
-            <Button 
-                title='toggle Theme'
-                buttonStyle={{ backgroundColor: currentTheme.lightColors.primary}} 
-                onPress={handleNavigate}
-            />
-        </View>
+            <View style={{ flex: 1 }}>
+                <Button 
+                    title='toggle Theme'
+                    buttonStyle={{ backgroundColor: currentTheme.lightColors.accent}} 
+                    onPress={toggleTheme}
+                />
+                <Button 
+                    title='toggle Theme'
+                    buttonStyle={{ backgroundColor: currentTheme.lightColors.primary}} 
+                    onPress={handleNavigate}
+                />
+            </View>
+        </MainContainer>
     )
 }

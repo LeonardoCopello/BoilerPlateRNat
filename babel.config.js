@@ -8,6 +8,7 @@ module.exports = {
                 'root': ['./src'],
                 'alias': {
                     '@components': './src/components',
+                    '@assets': './src/assets',
                     '@constants': './src/constants',
                     '@hooks': './src/hooks',
                     '@routes': './src/routes',

@@ -11,7 +11,7 @@ export const RoutesLogin = () => {
 
     return (
         <NavigationContainer>
-            <Navigator>
+            <Navigator screenOptions={{ headerShown: false }}>
                 <Screen 
                     name="Login"
                     component={Login}
