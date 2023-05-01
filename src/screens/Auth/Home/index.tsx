@@ -2,10 +2,9 @@ import React from 'react'
 import { Button, Text } from '@rneui/themed'
 import { MainBody, MainContainer } from '@components/Containers'
 import { HeaderDefault } from '@components/HeaderDefault'
-import { LoadingSpinner } from '@components/LoadingSpinner'
 import { IJokesData } from '@customTypes/screens/home'
 import { useAxios } from '@hooks/useAxios'
-import { NoInternetConnection } from '@components/misc/NoInternetConnection'
+import { UserRequestFeedBack } from '@components/UserRequestFeedBack'
 
 export const Home = () => {
 
@@ -14,18 +13,19 @@ export const Home = () => {
     })
 
     return (
-        <>
-            <MainContainer>
-                <HeaderDefault title='Home' />
-                <MainBody >
-                    <Text>Home Page</Text>
-                    <Text>{data?.setup} : {data?.delivery} </Text>
-                    { loading && <LoadingSpinner />}
-                </MainBody>
-                <Button title="Refetch" onPress={onRefresh} />
-            </MainContainer>
-            
-            { error && <NoInternetConnection onRefresh={onRefresh} />}
-        </>
+        <MainContainer>
+            <HeaderDefault title='Home' />
+            <MainBody >
+                <Text>Home Page</Text>
+                <Text>{data?.setup} : {data?.delivery} </Text>
+            </MainBody>
+            <Button title="Refetch" onPress={onRefresh} />
+            <UserRequestFeedBack 
+                loading={loading} 
+                error={error}
+                hideLoadingSpinner={false}
+                onRefresh={onRefresh}
+            />
+        </MainContainer>
     )
 }
