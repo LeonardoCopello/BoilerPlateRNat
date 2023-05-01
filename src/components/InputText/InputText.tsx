@@ -67,6 +67,8 @@ export const InputText = ({
                 ...labelCustomStyle,
             }}
             inputContainerStyle={{
+                borderWidth: 2,
+                borderRadius: 15,
                 borderColor: theme.colors.primary,
                 ...inputCustomStyle,
             }}

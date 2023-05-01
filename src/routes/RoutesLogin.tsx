@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { Login } from '@screens/Unauth/Access/Login'
 import { Forgot } from '@screens/Unauth/Access/Forgot'
 import { AuthRoutes } from './types/RoutesLogin'
+import { Home } from '@screens/Auth/Home'
 
 export const RoutesLogin = () => {
 
@@ -19,6 +20,10 @@ export const RoutesLogin = () => {
                 <Screen 
                     name="Forgot"
                     component={Forgot}
+                />
+                <Screen 
+                    name="Home"
+                    component={Home}
                 />
             </Navigator>
         </NavigationContainer>

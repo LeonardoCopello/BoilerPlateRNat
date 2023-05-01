@@ -43,7 +43,6 @@ export const InputTextForm = ({
                             onChangeText={(value) => {
                                 trim && value.trim()
                                 onChange(value.trimStart())
-                                // onChange(value)
                                 onOptionalChange && onOptionalChange(value)
                             }}
                             inputCustomStyle={inputCustomStyle}

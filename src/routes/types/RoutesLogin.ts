@@ -16,6 +16,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 export type AuthRoutes = {
     Login: undefined
     Forgot: { userLogin: string }
+    Home: undefined
 }
 
 export type AuthNavigatorRoutesProps = NativeStackNavigationProp<AuthRoutes>
