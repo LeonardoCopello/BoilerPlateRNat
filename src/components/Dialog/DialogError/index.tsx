@@ -4,13 +4,14 @@ import { Dialog, useTheme } from '@rneui/themed'
 import { DialogConfirmProps } from '@components/Dialog/types/dialogs'
 
 
-export const DialogConfirm = ( props: DialogConfirmProps) => {
-    const { title, bodyText ,isVisible, toggleVisibility, onPressConfirm} = props
+export const DialogError = ( props: DialogConfirmProps) => {
+    const { title, bodyText ,isVisible, labelBtnConfirm, toggleVisibility, onPressConfirm} = props
 
     const { theme } = useTheme()
 
     const DialogTitle = title ?? 'Atenção ?'
-    const DialogBodyText = bodyText ?? 'Você não pode realizar esta ação ?'
+    const DialogBodyText = bodyText ?? 'Este dado não confere ?'
+    const DialogLabelBtn = labelBtnConfirm ?? 'Entendi'
 
     const handleConfirm = () => {
         onPressConfirm()
@@ -26,8 +27,8 @@ export const DialogConfirm = ( props: DialogConfirmProps) => {
             <Text>{DialogBodyText}</Text>
             <Dialog.Actions>
                 <Dialog.Button
-                    color={theme.colors.error}
-                    title=""
+                    titleStyle={{ color: theme.colors.error }}
+                    title={DialogLabelBtn}
                     onPress={handleConfirm}/>
             </Dialog.Actions>
         </Dialog>

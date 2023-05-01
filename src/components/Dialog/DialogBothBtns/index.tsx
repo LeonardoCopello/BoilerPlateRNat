@@ -1,23 +1,28 @@
 import { Text } from 'react-native'
 import React from 'react'
 import { Dialog, useTheme } from '@rneui/themed'
-import { DialogConfirmProps } from '@components/Dialog/types/dialogs'
+import { DialogBothBtnsProps } from '@components/Dialog/types/dialogs'
 
 
-export const DialogConfirm = ( props: DialogConfirmProps) => {
-    const { title, bodyText ,isVisible, labelBtnConfirm, toggleVisibility, onPressConfirm} = props
+export const DialogBothBtns = ( props: DialogBothBtnsProps) => {
+    const { title, bodyText ,isVisible, labelBtnConfirm, labelBtnCancel, toggleVisibility, onPressConfirm, onPressCancel} = props
 
     const { theme } = useTheme()
 
     const DialogTitle = title ?? 'Confirma ?'
     const DialogBodyText = bodyText ?? 'Você confirma a exclusão da imagem ?'
-    const DialogLabelBtn = labelBtnConfirm ?? 'Confirmar'
+    const DialogLabelBtnConfirm = labelBtnConfirm ?? 'Sim'
+    const DialogLabelBtnCancel = labelBtnCancel ?? 'Não'
 
     const handleConfirm = () => {
         onPressConfirm()
         toggleVisibility()
     }
 
+    const handleCancel = () => {
+        onPressCancel()
+        toggleVisibility()
+    }
     return (
         <Dialog
             isVisible={isVisible}
@@ -28,8 +33,12 @@ export const DialogConfirm = ( props: DialogConfirmProps) => {
             <Dialog.Actions>
                 <Dialog.Button
                     titleStyle={{ color: theme.colors.primary }}
-                    title={DialogLabelBtn}
+                    title={DialogLabelBtnConfirm}
                     onPress={handleConfirm}/>
+                <Dialog.Button
+                    titleStyle={{ color: theme.colors.error }}
+                    title={DialogLabelBtnCancel}
+                    onPress={handleCancel}/>
             </Dialog.Actions>
         </Dialog>
     )
