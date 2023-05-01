@@ -5,6 +5,7 @@ import { Login } from '@screens/Unauth/Access/Login'
 import { Forgot } from '@screens/Unauth/Access/Forgot'
 import { AuthRoutes } from './types/RoutesLogin'
 import { Home } from '@screens/Auth/Home'
+import { TestPage } from '@screens/Auth/TestPage'
 
 export const RoutesLogin = () => {
 
@@ -24,6 +25,10 @@ export const RoutesLogin = () => {
                 <Screen 
                     name="Home"
                     component={Home}
+                />
+                <Screen 
+                    name="TestPage"
+                    component={TestPage}
                 />
             </Navigator>
         </NavigationContainer>

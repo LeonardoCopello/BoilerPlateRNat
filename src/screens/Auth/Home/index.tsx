@@ -16,7 +16,6 @@ export const Home = () => {
         <MainContainer>
             <HeaderDefault title='Home' />
             <MainBody >
-                <Text>Home Page</Text>
                 <Text>{data?.setup} : {data?.delivery} </Text>
             </MainBody>
             <Button title="Refetch" onPress={onRefresh} />

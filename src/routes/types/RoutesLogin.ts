@@ -17,6 +17,7 @@ export type AuthRoutes = {
     Login: undefined
     Forgot: { userLogin: string }
     Home: undefined
+    TestPage: undefined
 }
 
 export type AuthNavigatorRoutesProps = NativeStackNavigationProp<AuthRoutes>

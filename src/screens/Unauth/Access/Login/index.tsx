@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { View } from 'react-native'
 import {  Button, Text } from '@rneui/themed'
 import { RootState, useAppDispatch, useAppSelector } from '@store/Reducers'
@@ -11,7 +11,7 @@ import { InputTextForm } from '@components/InputText/InputTextForm'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { Fieldset } from '@components/Fieldset/Fieldset'
 import { DialogGlobal } from '@components/DialogGlobal'
-import { useAxios } from '@hooks/useAxios'
+import { SwitchComponent } from '@components/SwitchComponent'
 
 
 export const Login = () => {
@@ -36,17 +36,18 @@ export const Login = () => {
     const navigation = useNavigation<AuthNavigatorRoutesProps>()
     
     const dispatch = useAppDispatch()
+    const [checked, setChecked] = useState(false)
 
-    // const { currentTheme } = useAppSelector(
-    //     (state: RootState) => state.theme )
+    const { currentTheme } = useAppSelector(
+        (state: RootState) => state.theme )
     
-    // const toggleTheme = () => {
-    //     dispatch(setToggleTheme(currentTheme))
-    // }
+    const toggleTheme = () => {
+        dispatch(setToggleTheme(currentTheme))
+    }
     const handleNavigate = () => {
         navigation.navigate('Forgot', { userLogin: 'Leo'})
     }
-    const props = { type: 'onlyText', title: 'title', bodyText: 'Body'}
+    // const props = { type: 'onlyText', title: 'title', bodyText: 'Body'}
 
     return (
         <MainContainer>
@@ -73,21 +74,38 @@ export const Login = () => {
                         trim
                     />
             
-
+                    <SwitchComponent 
+                        labelChecked={'Light'}
+                        labelUnChecked={'Dark'}
+                        checked={checked} 
+                        setChecked={setChecked} 
+                    />
                     {/* <DialogGlobal  {...props}/> */}
-                    {/* <View style={{ flex: 1 }}>
-                        <Button 
+                    <View style={{ flex: 1 }}>
+                        <Button
+                            containerStyle={{ marginBottom: 20}}
                             title='toggle Theme'
                             buttonStyle={{ backgroundColor: currentTheme.lightColors.accent}} 
                             onPress={toggleTheme}
                         />
                         <Button 
-                            title='toggle Theme'
+                            containerStyle={{ marginBottom: 20}}
+                            title='Go to Forgot'
                             buttonStyle={{ backgroundColor: currentTheme.lightColors.primary}} 
                             onPress={handleNavigate}
                         />
-                    </View> */}
-                    <Button title="Home Page" onPress={() => navigation.navigate('Home')}/>
+                    </View>
+                    <Button 
+                        title="Home Page"
+                        containerStyle={{ marginBottom: 20}}
+                        onPress={() => navigation.navigate('Home')}
+                    />
+                    <Button 
+                        title="Test Page"
+                        containerStyle={{ marginBottom: 20}}
+                        onPress={() => navigation.navigate('TestPage')}
+                    />
+
                 </Fieldset>
 
             </MainBody>

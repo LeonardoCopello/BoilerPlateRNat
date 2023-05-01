@@ -14,7 +14,6 @@ export function useAxios <T>( props: Props ) {
 
     
     const onLoad = async () => {
-        console.log('onLoad')
         setLoading(true)
         await axios.get(url)
             .then((response) => {
