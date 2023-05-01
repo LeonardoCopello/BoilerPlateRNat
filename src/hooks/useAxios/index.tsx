@@ -1,24 +1,25 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import { LoadingSpinner } from '@components/LoadingSpinner'
 
-interface IProps {
+type Props = {
     url: string
 }
 
-export const useAxios = ( props: IProps ) => {
+export function useAxios <T>( props: Props ) {
     const { url } = props
-    const [data, setData] = useState(null)
+    const [data, setData] = useState<T | null>(null)
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null)
 
 
-    useEffect(() => {
+    
+    const onLoad = async () => {
+        console.log('onLoad')
         setLoading(true)
-        axios.get(url)
+        await axios.get(url)
             .then((response) => {
-
                 setData(response.data)
+                setError(null)
             })
             .catch((error) => {
                 setError(error)
@@ -26,11 +27,16 @@ export const useAxios = ( props: IProps ) => {
             .finally(() => {
                 setLoading(false)
             })
-    },[url])    
+    }
+        
+    useEffect(() => {
+        onLoad()
+    },[url])
 
     return {
         data: data,
         loading: loading,
-        error: error
+        error: error,
+        onRefresh: onLoad
     }
 }
