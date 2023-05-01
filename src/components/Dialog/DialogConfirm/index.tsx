@@ -5,7 +5,7 @@ import { DialogConfirmProps } from '@components/Dialog/types/dialogs'
 
 
 export const DialogConfirm = ( props: DialogConfirmProps) => {
-    const { title, bodyText ,isVisible, labelBtnConfirm, toggleVisibility, onPressConfirm} = props
+    const { title, bodyText, isVisible, labelBtnConfirm, toggleVisibility, onPressConfirm} = props
 
     const { theme } = useTheme()
 

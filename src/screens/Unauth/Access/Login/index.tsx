@@ -12,6 +12,7 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { Fieldset } from '@components/Fieldset/Fieldset'
 import { DialogGlobal } from '@components/DialogGlobal'
 import { SwitchComponent } from '@components/SwitchComponent'
+import { useSwitch } from '@hooks/useSwith'
 
 
 export const Login = () => {
@@ -36,14 +37,20 @@ export const Login = () => {
     const navigation = useNavigation<AuthNavigatorRoutesProps>()
     
     const dispatch = useAppDispatch()
-    const [checked, setChecked] = useState(false)
-
+    
     const { currentTheme } = useAppSelector(
         (state: RootState) => state.theme )
-    
+        
     const toggleTheme = () => {
         dispatch(setToggleTheme(currentTheme))
     }
+    const toggleActivity = () => {
+        if (checked) console.log('ativo')
+        if (!checked) console.log('inativo')
+        console.log('checked', checked)
+    }
+    const { checked, toggleChecked } = useSwitch({onToggle: toggleActivity })
+
     const handleNavigate = () => {
         navigation.navigate('Forgot', { userLogin: 'Leo'})
     }
@@ -74,11 +81,11 @@ export const Login = () => {
                         trim
                     />
             
-                    <SwitchComponent 
-                        labelChecked={'Light'}
-                        labelUnChecked={'Dark'}
-                        checked={checked} 
-                        setChecked={setChecked} 
+                    <SwitchComponent
+                        labelChecked={'Ativo'}
+                        labelUnChecked={'Inativo'} 
+                        checked={checked}
+                        toggleChecked={toggleChecked}
                     />
                     {/* <DialogGlobal  {...props}/> */}
                     <View style={{ flex: 1 }}>

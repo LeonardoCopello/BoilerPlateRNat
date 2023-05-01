@@ -12,8 +12,6 @@ export const TestPage = () => {
     const stateError = useVisibility()
     const stateBothBtns = useVisibility()
 
-
-
     const onPressConfirm = () => {
         console.log('apertou confirmar')
     }

@@ -11,8 +11,6 @@ export function useAxios <T>( props: Props ) {
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null)
 
-
-    
     const onLoad = async () => {
         setLoading(true)
         await axios.get(url)
