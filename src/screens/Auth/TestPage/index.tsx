@@ -20,7 +20,7 @@ export const TestPage = () => {
     // const { } = useImagePicker({multiple: false , resizeImage: false, frontCamera: false})
     const filePicker  = useFilePicker({ isMultipleSelection: true, permittedTypes: ['allFiles', 'image']})
     const imagePicker = useImagePicker({ useFrontCamera: false, height: 300, width: 100 ,media: { mediaType: 'photo', canCrop: true }, compressQuality: 0.2 })
-    const {  filteredList, isSearching, setSearch, search} = useFilter({ originalList: persons, propName: 'name', typeSearch: 'text'})
+    const {  filteredList, isSearching, setSearch, search } = useFilter({ originalList: persons, propName: 'matricula', typeSearch: 'mixed'})
     
 
     const onPressConfirm = () => {
@@ -44,11 +44,11 @@ export const TestPage = () => {
 
             {/* <MainBody > */}
             <SearchComponent 
-                setState={setSearch} 
+                setSearch={setSearch} 
                 isSearching={isSearching}
                 search={search} 
-                typeSearch={'text'} 
-                placeholder='Nome da Pessoa...' 
+                typeSearch='mixed'
+                placeholder='Matrícula...' 
             />
             <FlatList
                 data={filteredList}

@@ -10,7 +10,7 @@ type IProps <T> = {
  * @param originalList Lista a ser Filtrada
  * @param propName propriedade da lista a ser filtrada 
  * @param typeSearch propriedade que define o tipo de filtro
- * @returns filteredList - Lista
+ * @returns filteredList - Lista 
  * @returns search - input da busca digitado pelo usuário
  * @returns setSearch - muda estado do search
  * @returns isSearching - true durante filtragem
@@ -40,7 +40,7 @@ export const useFilter = <T extends Record<string, any>>({ originalList, propNam
                 }, 500)
             }
         }
-        if (typeSearch === 'text') {
+        if (typeSearch === 'text' || typeSearch === 'mixed') {
             setIsSearching(true)
             if (search === '') {
                 setFilteredList(originalList)
