@@ -1,4 +1,3 @@
-import { Dimensions } from 'react-native'
 import { IIconProps } from '@constants/types/constants'
 
 
@@ -23,6 +22,7 @@ interface IIcon {
   iconTruckDeliveryOutline: IIconProps
   iconAttachFile: IIconProps
   iconPlusCircleOutline: IIconProps
+  iconVideoAdd: IIconProps
 }
 
 export const ICONS: IIcon = {
@@ -73,6 +73,10 @@ export const ICONS: IIcon = {
     iconPlusCircleOutline: {
         type: 'material-community',
         name: 'plus-circle-outline',
+    },
+    iconVideoAdd: {
+        type: 'material-community',
+        name: 'video-plus',
     },
 }
 

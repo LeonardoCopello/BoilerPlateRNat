@@ -1,12 +1,10 @@
-// import MultipleImagePicker, { ImageResults } from '@baronha/react-native-multiple-image-picker'
-// import { getFileName } from '@mobtex/core-mobile/src/helpers/FileInfo'
-// import { getResizableImg } from '@mobtex/core-mobile/src/helpers/getResizableImg'
-// import { ICameraResponse } from '@mobtex/shared-app-olimpiadas/src/app/global/types/MobtexApp'
+import { ICONS } from '@constants/icons'
 import { BottomSheet, Icon, ListItem, useTheme } from '@rneui/themed'
 import React, { useState } from 'react'
-import { NativeModules } from 'react-native'
-import ImagePicker from 'react-native-image-crop-picker'
-
+import ImagePicker, { ImageCropPicker, openPicker, openCamera, ImageOrVideo } from 'react-native-image-crop-picker'
+import { IImagePickerListProps } from '@hooks/useImagePicker/types/useImagePicker'
+import { PermissionsAndroid } from 'react-native'
+import { requestCameraPermission } from '@helpers/permissions'
 
 export interface ISelectedFile {
   uri: string
@@ -15,6 +13,43 @@ export interface ISelectedFile {
   frontCamera?: boolean
 }
 
+type MediaType = 'video' | 'photo'
+
+interface IProps {
+    media: {
+        mediaType: MediaType,
+        canCrop: boolean
+    }
+    // canCrop: boolean
+    useFrontCamera: boolean
+}
+
+export interface ISelectedImage {
+    height: number,
+    width: number,
+    x: number, 
+    y: number
+}
+
+// video {
+//     duration: number //1365, 
+//     height: number //1920, 
+//     mime: string // "video/mp4", 
+//     modificationDate: string //"1683383011000", 
+//     path: string // "file:///storage/emulated/0/Android/data/com.boilerplate/files/Pictures/video-c0ff7dca-9609-45b2-ae17-75aad0229f316882656712171074004.mp4", 
+//     size: number //3792724, 
+//     width: number //1080
+// } 
+// imagem {
+//     "cropRect": {"height": 4080, "width": 3062, "x": 5, "y": 0},
+//     "height": 400,
+//     "mime": "image/jpeg",
+//     "modificationDate": "1683380497000", 
+//     "path": "file:///storage/emulated/0/Android/data/com.boilerplate/files/Pictures/9bb4c6ae-2eec-4f94-aa7a-581dfff8c191.jpg", 
+//     "size": 87892, 
+//     "width": 300
+// }
+   
 /**
  * Hook para captura de imagens direto da câmera ou galeria
  * @param multiple Verifica se pode selecionar mais de uma foto. Apenas para galeria de imagens
@@ -22,40 +57,46 @@ export interface ISelectedFile {
  * @param frontCamera Ativa a câmera frontal do aparelho
  */
 // export const useImagePicker = (multiple: boolean, resizeImage: boolean, frontCamera?: boolean) => {
-export const useImagePicker = () => {
+export const useImagePicker = (props: IProps) => {
+    const { media, useFrontCamera } = props
 
-    const [selectedFileList, setSelectedFileList] = useState<ISelectedFile[]>([])
-    const [isVisible, setIsVisible] = useState(false)
-    const { theme } = useTheme()
-    const { MobtexApp } = NativeModules
+    // const [selectedFileList, setSelectedFileList] = useState<ISelectedFile[]>([])
+    const [selectedImage, setSelectedImage] = useState<ImageOrVideo>({} as ImageOrVideo)
+    // const [isVisible, setIsVisible] = useState(false)
+    // const { theme } = useTheme()
     // const args = { moduleName: frontCamera ? 'MobtexFace' : 'MobtexPaper', scope: 'cv' } //Camera Frontal
     // const args = { moduleName: 'MobtexPaper' } //Camera Traseira
 
     /**
    * Exibe as opções de escolha de foto
    */
-    const showOptions = () => setIsVisible(true)
+    // const showOptions = () => setIsVisible(true)
 
     /**
    * Oculta as opções de escolha de foto
    */
-    const hideOptions = () => setIsVisible(false)
+    // const hideOptions = () => setIsVisible(false)
+
+    // interface ITakePictureProps {
+    //     useFrontCamera: boolean
+    // }
 
     /**
-   * Tira foto usando a câmera
+   * Tira foto ou video usando a câmera
    */
-    const handleTakePicture = async () => {
-        hideOptions()
-
-        // ImagePicker.openPicker({
-        //     width: 300,
-        //     height: 400,
-        //     cropping: true
-        //   }).then(image => {
-        //     console.log(image);
-        //   });
-
-        // const imageUri: ICameraResponse = await MobtexApp.start(JSON.stringify(args))
+    const handleTakeImage = async () => {
+        requestCameraPermission()
+        // hideOptions()
+        openCamera({
+            mediaType: media.mediaType,
+            width: 300,
+            height: 400,
+            cropping: media.mediaType === 'photo' ? media.canCrop : false,
+            useFrontCamera: useFrontCamera
+        }).then(file => {
+            console.log('file', file)
+            setSelectedImage(file)
+        })
 
         // if (imageUri.success) {
         //     if (imageUri.imgResult) {
@@ -66,85 +107,21 @@ export const useImagePicker = () => {
         // }
     }
 
-    // const handleTakePicture = async () => {
-    //   hideOptions()
-
-    //   const imageUri = await launchCamera({
-    //     mediaType: 'photo',
-    //     cameraType: frontCamera ? 'front' : 'back',
-    //   })
-
-    //   if (imageUri) {
-    //     const firstImage = imageUri.assets?.find((item, index) => index === 0)
-
-    //     if (firstImage && firstImage.uri && firstImage.fileName) {
-    //       const auxUri = await resizeUri(firstImage.uri)
-
-    //       if (auxUri) {
-    //         const imgFile = { uri: auxUri, name: firstImage.fileName, type: 'image/jpeg' }
-
-    //         setSelectedFileList([imgFile])
-    //       }
-    //     }
-    //   }
-    // }
-
     /**
-   * Abre a galeria de imagens para selecionar uma foto
-   */
-    const handleSelectFromGalery = async () => {
-        hideOptions()
-
-        // if (multiple) {
-        //     let newFile: ImageResults[] | undefined
-
-        //     await MultipleImagePicker.openPicker({
-        //         usedCameraButton: false,
-        //         //@ts-ignore
-        //         mediaType: 'image',
-        //     })
-        //         .then((response) => {
-        //             //@ts-ignore
-        //             newFile = response
-        //         })
-        //         .catch((error) => console.log(error.code, error.message))
-
-        //     if (newFile) {
-        //         const promises = newFile.map(async (item) => {
-        //             if (item.realPath) {
-        //                 return await getFileDetails(item.realPath)
-        //             }
-        //         })
-
-        //         Promise.all(promises).then((items) => {
-        //             if (items) {
-        //                 //@ts-ignore
-        //                 setSelectedFileList(items)
-        //             }
-        //         })
-        //     }
-        // } else {
-        //     let newFile: ImageResults | undefined
-
-        //     await MultipleImagePicker.openPicker({
-        //         singleSelectedMode: true,
-        //         usedCameraButton: false,
-        //         //@ts-ignore
-        //         mediaType: 'image',
-        //     })
-        //         .then((response) => {
-        //             //@ts-ignore
-        //             newFile = response
-        //         })
-        //         .catch((error) => console.log(error.code, error.message))
-
-        //     if (newFile && newFile.realPath) {
-        //         const imgFile = await getFileDetails(newFile.realPath)
-
-        //         setSelectedFileList([imgFile])
-        //     }
-        // }
-    }
+    * Grava video usando a câmera
+    */
+    // const handleTakeVideo = async () => {
+    //     requestCameraPermission()
+    //     hideOptions()
+    //     openCamera({
+    //         mediaType: 'video',
+    //         width: 300,
+    //         height: 400,
+    //     }).then(image => {
+    //         setSelectedImage(image)
+    //         console.log('imagem', image)
+    //     })
+    // }
 
     // const handleSelectFromGalery = async () => {
     //   hideOptions()
@@ -190,57 +167,70 @@ export const useImagePicker = () => {
     /**
    * Limpa o arquivo selecionado
    */
-    const clearSelectedFile = () => {
-        hideOptions()
+    // const clearSelectedFile = () => {
+    //     hideOptions()
 
-        setSelectedFileList([])
-    }
+    //     setSelectedFileList([])
+    // }
 
-    const list = [
-        {
-            title: 'Selecionar foto da Galeria',
-            iconName: 'image-multiple-outline',
-            onPress: handleSelectFromGalery,
-        },
-        { title: 'Tirar Foto', iconName: 'camera-outline', onPress: handleTakePicture },
-        { title: 'Deletar Foto', iconName: 'delete-forever-outline', onPress: clearSelectedFile },
-    ]
+    // const list: IImagePickerListProps[] = [
+    //     {
+    //         title: 'Tirar Foto Câmera Traseira',
+    //         icon: ICONS.iconImage,
+    //         type: 'photo',
+    //         onPress: () => handleTakePicture({ useFrontCamera: false}),
+    //     },
+    //     {
+    //         title: 'Tirar Selfie',
+    //         icon: ICONS.iconImage,
+    //         type: 'photo',
+    //         onPress: () => handleTakePicture({ useFrontCamera: true}),
+    //     },
+    //     {
+    //         title: 'Selecionar Video',
+    //         icon: ICONS.iconVideoAdd,
+    //         type: 'video',
+    //         onPress: handleTakeVideo,
+    //     }
+    // ]
 
     /**
    * Modal com as opções 'Tirar Foto', 'Abrir Galeria', 'Deletar Foto' e 'Cancelar'
    */
-    const ImagePicker = () => {
-        return (
-            <>
-                <BottomSheet isVisible={isVisible} onBackdropPress={hideOptions}>
-                    {list.map((l, i) => {
-                        if ((selectedFileList.length === 0 && i < 2) || selectedFileList.length > 0)
-                            return (
-                                <ListItem key={i} onPress={l.onPress}>
-                                    <Icon name={l.iconName} />
 
-                                    <ListItem.Title>{l.title}</ListItem.Title>
-                                </ListItem>
-                            )
-                    })}
+    // const BottomSheetImagePicker = () => {
+    //     return (
+    //         <>
+    //             <BottomSheet isVisible={isVisible} onBackdropPress={hideOptions}>
+    //                 {list.map((l, i) => {
+    //                     // if ((selectedFileList.length === 0 && i < 2) || selectedFileList.length > 0)
+    //                     return (
+    //                         <ListItem key={i} onPress={l.onPress}>
+    //                             <Icon {...l.icon} />
 
-                    <ListItem onPress={hideOptions} containerStyle={{ backgroundColor: theme.colors.error }}>
-                        <Icon name="close-circle-outline" color={theme.colors.white} />
+    //                             <ListItem.Title>{l.title}</ListItem.Title>
+    //                         </ListItem>
+    //                     )
+    //                 })}
 
-                        <ListItem.Title style={{ color: theme.colors.white }}>Cancelar</ListItem.Title>
-                    </ListItem>
-                </BottomSheet>
-            </>
-        )
-    }
+    //                 <ListItem onPress={hideOptions} containerStyle={{ backgroundColor: theme.colors.error }}>
+    //                     <Icon {...ICONS.iconClose} color={theme.colors.white} />
+
+    //                     <ListItem.Title style={{ color: theme.colors.white }}>Cancelar</ListItem.Title>
+    //                 </ListItem>
+    //             </BottomSheet>
+    //         </>
+    //     )
+    // }
 
     return {
-        selectedFileList: selectedFileList,
-        clearSelectedFile: clearSelectedFile,
-        handleTakePicture: handleTakePicture,
-        handleSelectFromGalery: handleSelectFromGalery,
-        showOptions: showOptions,
-        hideOptions: hideOptions,
-        ImagePicker: ImagePicker,
+        // selectedFileList: selectedFileList,
+        selectedImage: selectedImage,
+        // clearSelectedFile: clearSelectedFile,
+        handleTakeImage: handleTakeImage,
+        // handleTakeVideo: handleTakeVideo,
+        // showOptions: showOptions,
+        // hideOptions: hideOptions,
+        // BottomSheetImagePicker: BottomSheetImagePicker,
     }
 }

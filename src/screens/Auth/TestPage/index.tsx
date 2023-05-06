@@ -14,8 +14,8 @@ export const TestPage = () => {
     const stateBothBtns = useVisibility()
     const stateImagePicker  = useVisibility()
     // const { } = useImagePicker({multiple: false , resizeImage: false, frontCamera: false})
-    const { showOptions, hideOptions, BottomSheetFilePicker, selectedFileList } = useFilePicker({ isMultipleSelection: true, permittedTypes: ['allFiles', 'image']})
-
+    const filePicker  = useFilePicker({ isMultipleSelection: true, permittedTypes: ['allFiles', 'image']})
+    const imagePicker = useImagePicker({ useFrontCamera: true, media: { mediaType: 'video', canCrop: true } })
 
     const onPressConfirm = () => {
         console.log('apertou confirmar')
@@ -45,7 +45,7 @@ export const TestPage = () => {
                     toggleVisibility={stateError.toggleVisibility}
                     onPressConfirm={onPressConfirm} 
                 />
-                <BottomSheetFilePicker />
+                <filePicker.BottomSheetFilePicker />
                
             </MainBody>            
             <Button 
@@ -54,14 +54,14 @@ export const TestPage = () => {
                 onPress={stateConfirm.toggleVisibility}
             />
             <Button 
-                title="Dialog Error"
-                containerStyle={{ marginBottom: 20}}
-                onPress={stateError.toggleVisibility}
-            />
-            <Button 
                 title="Pick File"
                 containerStyle={{ marginBottom: 20}}
-                onPress={showOptions}
+                onPress={filePicker.showOptions}
+            />
+            <Button 
+                title="Pick Image"
+                containerStyle={{ marginBottom: 20}}
+                onPress={imagePicker.handleTakeImage}
             />
             
         </MainContainer>
