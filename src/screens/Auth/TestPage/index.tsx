@@ -14,7 +14,7 @@ export const TestPage = () => {
     const stateBothBtns = useVisibility()
     const stateImagePicker  = useVisibility()
     // const { } = useImagePicker({multiple: false , resizeImage: false, frontCamera: false})
-    const { showOptions, hideOptions, BottomSheetFilePicker, selectedFileList } = useFilePicker({ isMultipleSelection: true})
+    const { showOptions, hideOptions, BottomSheetFilePicker, selectedFileList } = useFilePicker({ isMultipleSelection: true, permittedTypes: ['allFiles', 'image']})
 
 
     const onPressConfirm = () => {
@@ -24,10 +24,6 @@ export const TestPage = () => {
     const onPressCancel = () => {
         console.log('apertou cancelar')
     }
-
-    useEffect(() => {
-        console.log('selectedFileList', selectedFileList)
-    },[selectedFileList])
 
     return (
         <MainContainer>

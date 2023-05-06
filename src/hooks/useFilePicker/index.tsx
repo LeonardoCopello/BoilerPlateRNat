@@ -2,26 +2,15 @@
 // import { getFileName } from '@mobtex/core-mobile/src/helpers/FileInfo'
 // import { getResizableImg } from '@mobtex/core-mobile/src/helpers/getResizableImg'
 // import { ICameraResponse } from '@mobtex/shared-app-olimpiadas/src/app/global/types/MobtexApp'
+import { ICONS } from '@constants/icons'
 import { BottomSheet, Icon, ListItem, useTheme } from '@rneui/themed'
 import React, { useState } from 'react'
 import DocumentPicker, { DocumentPickerResponse, types } from 'react-native-document-picker'
-
-
-
-export interface ISelectedFile {
-  fileCopyUri: string
-  name: string
-  size: number
-  type: string
-  uri: string
-}
-
-type PickType = 'pdf' | 'allFiles' | 'audio' | 'image'
-
+import { IFilePickerListProps, PickType } from '@hooks/useFilePicker/types/useFilePicker'
 
 interface IProps {
     isMultipleSelection: boolean
-    // types: PickType[]
+    permittedTypes: PickType[]
 }
 
 /**
@@ -32,16 +21,13 @@ interface IProps {
  */
 // export const useImagePicker = (multiple: boolean, resizeImage: boolean, frontCamera?: boolean) => {
 export const useFilePicker = (props: IProps) => {
-    const {isMultipleSelection} = props
+    const {isMultipleSelection, permittedTypes} = props
 
     // const [selectedFileList, setSelectedFileList] = useState<ISelectedFile[]>([])
     const [selectedFileList, setSelectedFileList] = useState<DocumentPickerResponse[]>([])
     
     const [isVisible, setIsVisible] = useState(false)
     const { theme } = useTheme()
-    // const args = { moduleName: frontCamera ? 'MobtexFace' : 'MobtexPaper', scope: 'cv' } //Camera Frontal
-    // const args = { moduleName: 'MobtexPaper' } //Camera Traseira
-
     /**
    * Exibe as opções de escolha de foto
    */
@@ -85,81 +71,36 @@ export const useFilePicker = (props: IProps) => {
         } catch (err) {
             console.warn(err)
         }
-
-        // ImagePicker.openPicker({
-        //     width: 300,
-        //     height: 400,
-        //     cropping: true
-        //   }).then(image => {
-        //     console.log(image);
-        //   });
-
-        // const imageUri: ICameraResponse = await MobtexApp.start(JSON.stringify(args))
-
-        // if (imageUri.success) {
-        //     if (imageUri.imgResult) {
-        //         const imgFile = await getFileDetails(imageUri.imgResult)
-
-        //         setSelectedFileList([imgFile])
-        //     }
-        // }
     }
-
-    // const handleTakePicture = async () => {
-    //   hideOptions()
-
-    //   const imageUri = await launchCamera({
-    //     mediaType: 'photo',
-    //     cameraType: frontCamera ? 'front' : 'back',
-    //   })
-
-    //   if (imageUri) {
-    //     const firstImage = imageUri.assets?.find((item, index) => index === 0)
-
-    //     if (firstImage && firstImage.uri && firstImage.fileName) {
-    //       const auxUri = await resizeUri(firstImage.uri)
-
-    //       if (auxUri) {
-    //         const imgFile = { uri: auxUri, name: firstImage.fileName, type: 'image/jpeg' }
-
-    //         setSelectedFileList([imgFile])
-    //       }
-    //     }
-    //   }
-    // }
-
-    /**
-   * Abre a galeria de imagens para selecionar uma foto
-   */
-
-    /**
-   * Limpa o arquivo selecionado
-   */
     const clearSelectedFile = () => {
         hideOptions()
 
         setSelectedFileList([])
     }
 
-    const list = [
+    const list: IFilePickerListProps[] = [
         {
             title: 'Selecionar Pdf',
-            iconName: 'image-multiple-outline',
+            icon: ICONS.iconPdf,
+            type: 'pdf',
             onPress: () => handlePickFile('pdf'),
         },
         {
             title: 'Selecionar Tipos Variáveis',
-            iconName: 'image-multiple-outline',
+            icon: ICONS.iconFileDownLoad,
+            type: 'allFiles',
             onPress: () => handlePickFile('allFiles'),
         },
         {
             title: 'Selecionar Áudio',
-            iconName: 'image-multiple-outline',
+            icon: ICONS.iconFileDownLoad,
+            type: 'audio',
             onPress: () => handlePickFile('audio'),
         },
         {
             title: 'Selecionar Imagem',
-            iconName: 'image-multiple-outline',
+            icon: ICONS.iconImage,
+            type: 'image',
             onPress: () => handlePickFile('image'),
         }
     ]
@@ -171,18 +112,20 @@ export const useFilePicker = (props: IProps) => {
         return (
             <BottomSheet isVisible={isVisible} onBackdropPress={hideOptions}>
                 {list.map((l, i) => {
-                    return (
-                        <ListItem key={i} onPress={l.onPress}>
-                            <Icon name={l.iconName} />
-
-                            <ListItem.Title>{l.title}</ListItem.Title>
-                        </ListItem>
-                    )
+                    if (permittedTypes.includes(l.type)) {
+                        return (
+                            <ListItem key={i} onPress={() => l.onPress(l.type)}>
+                                <Icon {...l.icon} />
+    
+                                <ListItem.Title>{l.title}</ListItem.Title>
+                            </ListItem>
+                        )
+                    }
                 })
                 }
 
                 <ListItem onPress={hideOptions} containerStyle={{ backgroundColor: theme.colors.error }}>
-                    <Icon name="close-circle-outline" color={theme.colors.white} />
+                    <Icon {...ICONS.iconClose} color={theme.colors.white} />
 
                     <ListItem.Title style={{ color: theme.colors.white }}>Cancelar</ListItem.Title>
                 </ListItem>
