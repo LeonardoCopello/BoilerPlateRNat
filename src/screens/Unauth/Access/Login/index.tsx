@@ -12,7 +12,7 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { Fieldset } from '@components/Fieldset/Fieldset'
 import { DialogGlobal } from '@components/DialogGlobal'
 import { SwitchComponent } from '@components/SwitchComponent'
-import { useSwitch } from '@hooks/useSwith'
+import { useSwitch } from '@hooks/useSwitch'
 
 
 export const Login = () => {
@@ -59,6 +59,7 @@ export const Login = () => {
     return (
         <MainContainer>
             <HeaderDefault
+                leftComponent={{ iconType: 'drawer' }}
                 title={'Login'}
                 // rightComponent={{ }}
             />

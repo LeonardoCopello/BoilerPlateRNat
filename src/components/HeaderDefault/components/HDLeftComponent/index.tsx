@@ -8,7 +8,7 @@ import { View } from 'react-native'
 
 export const HDLeftComponent = (props: HDLeftComponentProps) => {
     const navigation = useNavigation()
-    const openDrawer = () => navigation.dispatch(DrawerActions.openDrawer)
+    const openDrawer = () => navigation.dispatch(DrawerActions.openDrawer())
     
     const { theme } = useTheme()
     const { iconType, isDisableLeftIcon, size } = props

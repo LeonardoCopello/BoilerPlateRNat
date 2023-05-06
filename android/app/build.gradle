@@ -97,6 +97,7 @@ android {
 
     namespace "com.boilerplate"
     defaultConfig {
+        vectorDrawables.useSupportLibrary = true
         applicationId "com.boilerplate"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion

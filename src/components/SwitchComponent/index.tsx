@@ -1,4 +1,4 @@
-import { useSwitch } from '@hooks/useSwith'
+import { useSwitch } from '@hooks/useSwitch'
 import { Switch, Text, useTheme } from '@rneui/themed'
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'

@@ -1,16 +1,21 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Button, Text } from '@rneui/themed'
 import { MainBody, MainContainer } from '@components/Containers'
 import { HeaderDefault } from '@components/HeaderDefault'
 import { DialogConfirm } from '@components/Dialog/DialogConfirm'
 import { useVisibility } from '@hooks/useVisibility'
 import { DialogError } from '@components/Dialog/DialogError'
-import { DialogBothBtns } from '@components/Dialog/DialogBothBtns'
+import { useImagePicker } from '@hooks/useImagePicker'
+import { useFilePicker } from '@hooks/useFilePicker'
 
 export const TestPage = () => {
     const stateConfirm = useVisibility()
     const stateError = useVisibility()
     const stateBothBtns = useVisibility()
+    const stateImagePicker  = useVisibility()
+    // const { } = useImagePicker({multiple: false , resizeImage: false, frontCamera: false})
+    const { showOptions, hideOptions, BottomSheetFilePicker, selectedFileList } = useFilePicker({ isMultipleSelection: true})
+
 
     const onPressConfirm = () => {
         console.log('apertou confirmar')
@@ -19,6 +24,10 @@ export const TestPage = () => {
     const onPressCancel = () => {
         console.log('apertou cancelar')
     }
+
+    useEffect(() => {
+        console.log('selectedFileList', selectedFileList)
+    },[selectedFileList])
 
     return (
         <MainContainer>
@@ -40,17 +49,8 @@ export const TestPage = () => {
                     toggleVisibility={stateError.toggleVisibility}
                     onPressConfirm={onPressConfirm} 
                 />
-                <DialogBothBtns
-                    title='Deseja fazer o que?'
-                    bodyText='Corpo do Dialog Both Btns'
-                    isVisible={stateBothBtns.isVisible}
-                    labelBtnConfirm='Yes'
-                    labelBtnCancel='No'
-                    toggleVisibility={stateBothBtns.toggleVisibility}
-                    onPressConfirm={onPressConfirm} 
-                    onPressCancel={onPressCancel}
-                />
-                <Text>TestPage</Text>
+                <BottomSheetFilePicker />
+               
             </MainBody>            
             <Button 
                 title="Dialog Confirm"
@@ -63,10 +63,11 @@ export const TestPage = () => {
                 onPress={stateError.toggleVisibility}
             />
             <Button 
-                title="Dialog Both Btns"
+                title="Pick File"
                 containerStyle={{ marginBottom: 20}}
-                onPress={stateBothBtns.toggleVisibility}
+                onPress={showOptions}
             />
+            
         </MainContainer>
     )
 }
