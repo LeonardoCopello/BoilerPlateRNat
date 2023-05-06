@@ -7,6 +7,7 @@ import { useVisibility } from '@hooks/useVisibility'
 import { DialogError } from '@components/Dialog/DialogError'
 import { useImagePicker } from '@hooks/useImagePicker'
 import { useFilePicker } from '@hooks/useFilePicker'
+import { Image } from 'react-native'
 
 export const TestPage = () => {
     const stateConfirm = useVisibility()
@@ -15,7 +16,8 @@ export const TestPage = () => {
     const stateImagePicker  = useVisibility()
     // const { } = useImagePicker({multiple: false , resizeImage: false, frontCamera: false})
     const filePicker  = useFilePicker({ isMultipleSelection: true, permittedTypes: ['allFiles', 'image']})
-    const imagePicker = useImagePicker({ useFrontCamera: true, media: { mediaType: 'video', canCrop: true } })
+    const imagePicker = useImagePicker({ useFrontCamera: false, height: 300, width: 100 ,media: { mediaType: 'photo', canCrop: true }, compressQuality: 0.2 })
+    
 
     const onPressConfirm = () => {
         console.log('apertou confirmar')
@@ -24,11 +26,20 @@ export const TestPage = () => {
     const onPressCancel = () => {
         console.log('apertou cancelar')
     }
+    useEffect(() => {
+        console.log('imagePicker.selectedImage.path >>>>>>>>', imagePicker.selectedImage.path)
+    },[imagePicker.selectedImage])
 
     return (
         <MainContainer>
             <HeaderDefault title='Home' />
+            {/* { imagePicker.selectedImage.path !== undefined && ( */}
+            {/* <Image source={{uri: imagePicker.base64DataFile}} style={{ width: 200, height: 200}}/> */}
+            {/* )} */}
+            {/* <Image source={require('../../../assets/img/placeholder.jpg')} style={{ width: 200, height: 500}} resizeMode='contain'/> */}
+
             <MainBody >
+                { imagePicker.selectedImage.path !== null && <Image source={{uri: imagePicker.selectedImage.path}} style={{ width: 200, height: 700}} resizeMode='contain'/>}
                 <DialogConfirm
                     title='Confirma exclusão?'
                     bodyText='Corpo do Dialog Confirm'

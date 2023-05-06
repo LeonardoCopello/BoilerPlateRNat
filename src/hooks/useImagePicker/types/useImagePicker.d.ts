@@ -1,14 +1,15 @@
-export interface ISelectedImage {
-    fileCopyUri: string
-    name: string
-    size: number
-    type: string
-    uri: string
-}
+export type MediaType = 'video' | 'photo'
 
-export interface IImagePickerListProps {
-    title: string,
-    icon: IIconProps,
-    type: PickType,
-    onPress: () => void,
+export type CompressQuality = 0.1 | 0.2 | 0.3 | 0.4 | 0.5 | 0.6 | 0.7 | 0.8 | 0.9 | 1
+
+export interface IUseImagePickerProps {
+    media: {
+        mediaType: MediaType,
+        canCrop: boolean
+    }
+    // canCrop: boolean
+    useFrontCamera: boolean
+    width?: number
+    height?: number
+    compressQuality?: CompressQuality
 }

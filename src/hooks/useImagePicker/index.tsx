@@ -1,85 +1,22 @@
-import { ICONS } from '@constants/icons'
-import { BottomSheet, Icon, ListItem, useTheme } from '@rneui/themed'
 import React, { useState } from 'react'
-import ImagePicker, { ImageCropPicker, openPicker, openCamera, ImageOrVideo } from 'react-native-image-crop-picker'
-import { IImagePickerListProps } from '@hooks/useImagePicker/types/useImagePicker'
-import { PermissionsAndroid } from 'react-native'
+import { openCamera, ImageOrVideo } from 'react-native-image-crop-picker'
+
 import { requestCameraPermission } from '@helpers/permissions'
+import { IUseImagePickerProps } from '@hooks/useImagePicker/types/useImagePicker'
 
-export interface ISelectedFile {
-  uri: string
-  name: string
-  type: string
-  frontCamera?: boolean
-}
-
-type MediaType = 'video' | 'photo'
-
-interface IProps {
-    media: {
-        mediaType: MediaType,
-        canCrop: boolean
-    }
-    // canCrop: boolean
-    useFrontCamera: boolean
-}
-
-export interface ISelectedImage {
-    height: number,
-    width: number,
-    x: number, 
-    y: number
-}
-
-// video {
-//     duration: number //1365, 
-//     height: number //1920, 
-//     mime: string // "video/mp4", 
-//     modificationDate: string //"1683383011000", 
-//     path: string // "file:///storage/emulated/0/Android/data/com.boilerplate/files/Pictures/video-c0ff7dca-9609-45b2-ae17-75aad0229f316882656712171074004.mp4", 
-//     size: number //3792724, 
-//     width: number //1080
-// } 
-// imagem {
-//     "cropRect": {"height": 4080, "width": 3062, "x": 5, "y": 0},
-//     "height": 400,
-//     "mime": "image/jpeg",
-//     "modificationDate": "1683380497000", 
-//     "path": "file:///storage/emulated/0/Android/data/com.boilerplate/files/Pictures/9bb4c6ae-2eec-4f94-aa7a-581dfff8c191.jpg", 
-//     "size": 87892, 
-//     "width": 300
-// }
-   
 /**
  * Hook para captura de imagens direto da câmera ou galeria
- * @param multiple Verifica se pode selecionar mais de uma foto. Apenas para galeria de imagens
- * @param resizeImage Ativa o redimensionamento de imagem
- * @param frontCamera Ativa a câmera frontal do aparelho
+ * @param media Passa tipo de imagem a pegar (video ou foto) e se pode redimensionar
+ * @param useFrontCamera Verifica se permite usar a câmera frontal
+ * @param width largura da imagem
+ * @param height altura da imagem
  */
-// export const useImagePicker = (multiple: boolean, resizeImage: boolean, frontCamera?: boolean) => {
-export const useImagePicker = (props: IProps) => {
-    const { media, useFrontCamera } = props
+export const useImagePicker = (props: IUseImagePickerProps) => {
+    const { media, useFrontCamera, width = 300, height = 400, compressQuality = 1 } = props
+    const { canCrop, mediaType } = media
 
-    // const [selectedFileList, setSelectedFileList] = useState<ISelectedFile[]>([])
     const [selectedImage, setSelectedImage] = useState<ImageOrVideo>({} as ImageOrVideo)
-    // const [isVisible, setIsVisible] = useState(false)
-    // const { theme } = useTheme()
-    // const args = { moduleName: frontCamera ? 'MobtexFace' : 'MobtexPaper', scope: 'cv' } //Camera Frontal
-    // const args = { moduleName: 'MobtexPaper' } //Camera Traseira
-
-    /**
-   * Exibe as opções de escolha de foto
-   */
-    // const showOptions = () => setIsVisible(true)
-
-    /**
-   * Oculta as opções de escolha de foto
-   */
-    // const hideOptions = () => setIsVisible(false)
-
-    // interface ITakePictureProps {
-    //     useFrontCamera: boolean
-    // }
+    const [base64Data, setBase64Data] = useState('')
 
     /**
    * Tira foto ou video usando a câmera
@@ -87,65 +24,35 @@ export const useImagePicker = (props: IProps) => {
     const handleTakeImage = async () => {
         requestCameraPermission()
         // hideOptions()
-        openCamera({
-            mediaType: media.mediaType,
-            width: 300,
-            height: 400,
-            cropping: media.mediaType === 'photo' ? media.canCrop : false,
-            useFrontCamera: useFrontCamera
-        }).then(file => {
-            console.log('file', file)
-            setSelectedImage(file)
-        })
-
-        // if (imageUri.success) {
-        //     if (imageUri.imgResult) {
-        //         const imgFile = await getFileDetails(imageUri.imgResult)
-
-        //         setSelectedFileList([imgFile])
-        //     }
-        // }
+        if (mediaType === 'photo') {
+            openCamera({
+                mediaType: 'photo',
+                width: width,
+                height: height,
+                cropping: canCrop,
+                useFrontCamera: useFrontCamera,
+                includeBase64: true,
+                freeStyleCropEnabled: true,
+                cropperToolbarTitle: 'Ajuste da Image',
+                compressImageQuality: compressQuality           
+            }).then(file => {
+                console.log('file', file)
+                setBase64Data(`data:${file.mime};base64,${file.data}`)
+                setSelectedImage(file)
+            })
+        }
+        if (mediaType === 'video') {
+            openCamera({
+                mediaType: 'video',
+                useFrontCamera: useFrontCamera,
+                compressQuality: compressQuality
+            }).then(file => {
+                console.log('file', file)
+                setSelectedImage(file)
+            })
+        }
     }
 
-    /**
-    * Grava video usando a câmera
-    */
-    // const handleTakeVideo = async () => {
-    //     requestCameraPermission()
-    //     hideOptions()
-    //     openCamera({
-    //         mediaType: 'video',
-    //         width: 300,
-    //         height: 400,
-    //     }).then(image => {
-    //         setSelectedImage(image)
-    //         console.log('imagem', image)
-    //     })
-    // }
-
-    // const handleSelectFromGalery = async () => {
-    //   hideOptions()
-
-    //   const fileList = await launchImageLibrary({
-    //     mediaType: 'photo',
-    //     selectionLimit: multiple ? 0 : 1,
-    //   })
-
-    //   if (fileList && fileList.assets) {
-    //     const promises = fileList.assets.map(async (item) => {
-    //       if (item.uri && item.fileName) {
-    //         return { uri: await resizeUri(item.uri), name: item.fileName, type: 'image/jpeg' }
-    //       }
-    //     })
-
-    //     Promise.all(promises).then((items) => {
-    //       if (items) {
-    //         //@ts-ignore
-    //         setSelectedFileList(items)
-    //       }
-    //     })
-    //   }
-    // }
 
     /**
    * @returns Um objeto com as informacões da imagem
@@ -223,14 +130,16 @@ export const useImagePicker = (props: IProps) => {
     //     )
     // }
 
+    /**
+   * @returns selectedImage - Retorna um objeto com as informacões da imagem
+   * @returns handleTakeImage - Abre a tela de captura
+   * @returns base64Data - Retorna dados da image em base64
+   * 
+   */
     return {
-        // selectedFileList: selectedFileList,
         selectedImage: selectedImage,
-        // clearSelectedFile: clearSelectedFile,
         handleTakeImage: handleTakeImage,
-        // handleTakeVideo: handleTakeVideo,
-        // showOptions: showOptions,
-        // hideOptions: hideOptions,
-        // BottomSheetImagePicker: BottomSheetImagePicker,
+        base64DataFile: base64Data
+
     }
 }
