@@ -11,6 +11,7 @@ import { FlatList, Image } from 'react-native'
 import { SearchComponent } from '@components/Search'
 import { useFilter } from '@hooks/useFilter'
 import { persons } from '@constants/mocks'
+import { DialogButtonLess } from '@components/Dialog/DialogButtonLess'
 
 export const TestPage = () => {
     const stateConfirm = useVisibility()
@@ -65,25 +66,29 @@ export const TestPage = () => {
                 title='Confirma exclusão?'
                 bodyText='Corpo do Dialog Confirm'
                 isVisible={stateConfirm.isVisible}
-                labelBtnConfirm={undefined}                
+                labelBtnConfirm={undefined}
+                modalType='bottomSheet'          
                 toggleVisibility={stateConfirm.toggleVisibility}
                 onPressConfirm={onPressConfirm} 
             />
-            <DialogError
+            <DialogButtonLess
                 title='Erro'
                 bodyText='Corpo do Dialog Error'
                 isVisible={stateError.isVisible}
-                labelBtnConfirm={'Ok'}                
+                modalType='bottomSheet'
                 toggleVisibility={stateError.toggleVisibility}
-                onPressConfirm={onPressConfirm} 
             />
             <filePicker.BottomSheetFilePicker />
                
-            {/* </MainBody>             */}
             <Button 
                 title="Dialog Confirm"
                 containerStyle={{ marginBottom: 20}}
                 onPress={stateConfirm.toggleVisibility}
+            />
+            <Button 
+                title="Dialog Error"
+                containerStyle={{ marginBottom: 20}}
+                onPress={stateError.toggleVisibility}
             />
             <Button 
                 title="Pick File"

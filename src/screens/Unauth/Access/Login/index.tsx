@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { View } from 'react-native'
+import { yupResolver } from '@hookform/resolvers/yup'
 import {  Button, Text } from '@rneui/themed'
 import { RootState, useAppDispatch, useAppSelector } from '@store/Reducers'
 import { setToggleTheme } from '@store/theme/themeApp'
@@ -13,6 +14,9 @@ import { Fieldset } from '@components/Fieldset/Fieldset'
 import { DialogGlobal } from '@components/DialogGlobal'
 import { SwitchComponent } from '@components/SwitchComponent'
 import { useSwitch } from '@hooks/useSwitch'
+import { LoginSchema } from '@services/yup/loginSchema'
+import { BoilerplateModule } from '@util/Module'
+import { ICONS } from '@constants/icons'
 
 
 export const Login = () => {
@@ -31,7 +35,7 @@ export const Login = () => {
         defaultValues: {
         //   year: '2023'.toString(),
         },
-        // resolver: yupResolver(CertificateItemsSchema),
+        resolver: yupResolver(LoginSchema),
     })
 
     const navigation = useNavigation<AuthNavigatorRoutesProps>()
@@ -51,8 +55,11 @@ export const Login = () => {
     }
     const { checked, toggleChecked } = useSwitch({onToggle: toggleActivity })
 
-    const handleNavigate = () => {
+    const handleNavigateForgot = () => {
         navigation.navigate('Forgot', { userLogin: 'Leo'})
+    }
+    const handleNavigateHome = () => {
+        navigation.navigate('Home')
     }
     // const props = { type: 'onlyText', title: 'title', bodyText: 'Body'}
 
@@ -64,13 +71,14 @@ export const Login = () => {
                 // rightComponent={{ }}
             />
             <MainBody>
-                <Fieldset title='Login' >
+                <Fieldset title={BoilerplateModule.moduleLoginMainTitle} >
                     <InputTextForm
                         errors={errors}
                         control={control}
                         name="userName"
                         label="Usuário"
                         disabled={false}
+                        // CustomIcon={{ ...ICONS.iconCalendar }}
                         trim
                     />
                     <InputTextForm
@@ -80,6 +88,15 @@ export const Login = () => {
                         label="Senha"
                         disabled={false}
                         trim
+                        secureTextEntry
+                        // CustomIcon={{ ...ICONS.iconCalendar }}
+
+                    />
+                    <Button 
+                        containerStyle={{ marginBottom: 20}}
+                        title='Entrar'
+                        buttonStyle={{ backgroundColor: currentTheme.lightColors.primary}} 
+                        onPress={handleSubmit(handleNavigateHome)}
                     />
             
                     <SwitchComponent
@@ -100,7 +117,7 @@ export const Login = () => {
                             containerStyle={{ marginBottom: 20}}
                             title='Go to Forgot'
                             buttonStyle={{ backgroundColor: currentTheme.lightColors.primary}} 
-                            onPress={handleNavigate}
+                            onPress={handleNavigateForgot}
                         />
                     </View>
                     <Button 

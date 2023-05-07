@@ -11,9 +11,9 @@ export const InputTextForm = ({
     control,
     errors,
     trim,
-    leftIcon,
-    leftIconType,
-    leftIconName,
+    // leftIcon,
+    // leftIconType,
+    // leftIconName,
     secondaryColor,
     CustomIcon,
     fieldType,
@@ -29,7 +29,7 @@ export const InputTextForm = ({
             <Controller
                 control={control}
                 render={({ field: { onChange, onBlur, value } }) => (
-                    <>
+                    <View>
                         <InputText
                             secondaryColor={secondaryColor}
                             InputProps={InputProps}
@@ -48,27 +48,7 @@ export const InputTextForm = ({
                             inputCustomStyle={inputCustomStyle}
                             labelCustomStyle={labelCustomStyle}
                         />
-
-                        {errors && !value && !inputCustomStyle && (
-                            <ErrorMessage
-                                errors={errors}
-                                name={name}
-                                render={({ message }) => (
-                                    <Text
-                                        style={{
-                                            color: theme.colors.error,
-                                            fontSize: 14,
-                                            marginLeft: 24,
-                                            marginTop: -19,
-                                            textAlign: 'center',
-                                        }}>
-                                        {message}
-                                    </Text>
-                                )}
-                            />
-                        )}
-                        {/* Criei este estilo de erro para quando eu passar um inputCustomStyle, então letras ficam menores */}
-                        {errors && inputCustomStyle && (
+                        {errors && !value ? (
                             <ErrorMessage
                                 errors={errors}
                                 name={name}
@@ -84,9 +64,9 @@ export const InputTextForm = ({
                                     </Text>
                                 )}
                             />
-                        )}
+                        ) : null}
 
-                    </>
+                    </View>
                 )}
                 name={name}
             />
