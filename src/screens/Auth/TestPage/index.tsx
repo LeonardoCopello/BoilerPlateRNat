@@ -12,6 +12,7 @@ import { SearchComponent } from '@components/Search'
 import { useFilter } from '@hooks/useFilter'
 import { persons } from '@constants/mocks'
 import { DialogButtonLess } from '@components/Dialog/DialogButtonLess'
+import { DialogBothBtns } from '@components/Dialog/DialogBothBtns'
 
 export const TestPage = () => {
     const stateConfirm = useVisibility()
@@ -71,12 +72,16 @@ export const TestPage = () => {
                 toggleVisibility={stateConfirm.toggleVisibility}
                 onPressConfirm={onPressConfirm} 
             />
-            <DialogButtonLess
+            <DialogBothBtns
                 title='Erro'
                 bodyText='Corpo do Dialog Error'
                 isVisible={stateError.isVisible}
                 modalType='bottomSheet'
-                toggleVisibility={stateError.toggleVisibility}
+                toggleVisibility={stateError.toggleVisibility} 
+                onPressConfirm={onPressConfirm}
+                labelBtnConfirm={undefined} 
+                labelBtnCancel={undefined} 
+                onPressCancel={onPressCancel}
             />
             <filePicker.BottomSheetFilePicker />
                
@@ -86,7 +91,7 @@ export const TestPage = () => {
                 onPress={stateConfirm.toggleVisibility}
             />
             <Button 
-                title="Dialog Error"
+                title="Dialog Both Btns"
                 containerStyle={{ marginBottom: 20}}
                 onPress={stateError.toggleVisibility}
             />
