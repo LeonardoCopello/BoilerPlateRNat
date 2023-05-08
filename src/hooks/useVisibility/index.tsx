@@ -8,6 +8,7 @@ export const useVisibility = () => {
     }
     return {
         toggleVisibility: toggleVisibility,
-        isVisible: isVisible
+        isVisible: isVisible,
+        setIsVisible: setIsVisible
     }
 }

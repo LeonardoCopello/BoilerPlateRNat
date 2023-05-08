@@ -13,10 +13,13 @@ import { useFilter } from '@hooks/useFilter'
 import { persons } from '@constants/mocks'
 import { DialogButtonLess } from '@components/Dialog/DialogButtonLess'
 import { DialogBothBtns } from '@components/Dialog/DialogBothBtns'
+import { WalkThroughComponent } from '@components/WalkThrough'
+import { slides } from '@components/WalkThrough/mock'
 
 export const TestPage = () => {
     const stateConfirm = useVisibility()
     const stateError = useVisibility()
+    const stateWalkThrough = useVisibility()
     const stateBothBtns = useVisibility()
     const stateImagePicker  = useVisibility()
     // const { } = useImagePicker({multiple: false , resizeImage: false, frontCamera: false})
@@ -83,6 +86,11 @@ export const TestPage = () => {
                 labelBtnCancel={undefined} 
                 onPressCancel={onPressCancel}
             />
+            <WalkThroughComponent 
+                isVisible={stateWalkThrough.isVisible} 
+                setIsVisible={stateWalkThrough.setIsVisible}
+                slideList={slides}                
+            />
             <filePicker.BottomSheetFilePicker />
                
             <Button 
@@ -94,6 +102,11 @@ export const TestPage = () => {
                 title="Dialog Both Btns"
                 containerStyle={{ marginBottom: 20}}
                 onPress={stateError.toggleVisibility}
+            />
+            <Button 
+                title="Walkthrough"
+                containerStyle={{ marginBottom: 20}}
+                onPress={stateWalkThrough.toggleVisibility}
             />
             <Button 
                 title="Pick File"
