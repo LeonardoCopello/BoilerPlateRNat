@@ -86,7 +86,7 @@ export const TestPage = () => {
                 labelBtnCancel={undefined} 
                 onPressCancel={onPressCancel}
             />
-            <WalkThroughComponent 
+            <WalkThroughComponent
                 isVisible={stateWalkThrough.isVisible} 
                 setIsVisible={stateWalkThrough.setIsVisible}
                 slideList={slides}                

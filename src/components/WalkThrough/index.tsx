@@ -28,7 +28,7 @@ export const WalkThroughComponent = (props: IWalkThroughProps) => {
     const { 
         labelLeftBtn = 'PULAR',
         labelRightBtn = 'PRÓXIMO',
-        slideBG = colors.black, 
+        slideBG = '#EBEBEB', 
         labelColor = colors.white, 
         slideList = slides, 
         isVisible, 
@@ -49,16 +49,16 @@ export const WalkThroughComponent = (props: IWalkThroughProps) => {
     const Slide = (props : IRenderItem) => {
         const { item } = props
         return (
-            <View style={{ alignItems: 'center', backgroundColor: colors.black, width: width }}>
-                <FastImage 
+            <View style={{ alignItems: 'center', backgroundColor: '#EBEBEB', width: width, paddingTop: 106 }}>
+                <FastImage
                     // source={{ uri: item.image }}
                     source={item.image}
 
                     style={{ height: '75%', width: width }}
                     resizeMode='contain'
                 />
-                <Text style={[styles.title, { color: labelColor} ]}>{item.title}</Text>
-                <Text style={[styles.subtitle, { color: labelColor} ]}>{item.title}</Text>
+                {/* <Text style={[styles.title, { color: labelColor} ]}>{item.title}</Text>
+                <Text style={[styles.subtitle, { color: labelColor} ]}>{item.title}</Text> */}
 
             </View>
         )
@@ -77,6 +77,14 @@ export const WalkThroughComponent = (props: IWalkThroughProps) => {
             const offset = nextSlideIndex * width
             ref?.current?.scrollToOffset({offset})
             setCurrentSlideIndex(nextSlideIndex)
+        }
+    }
+    const goPreviousSlide = () => {
+        const previousSlideIndex = currentSlideIndex - 1
+        if (previousSlideIndex != slides.length) {
+            const offset = previousSlideIndex * width
+            ref?.current?.scrollToOffset({offset})
+            setCurrentSlideIndex(previousSlideIndex)
         }
     }
 
@@ -117,7 +125,8 @@ export const WalkThroughComponent = (props: IWalkThroughProps) => {
                 currentSlideIndex={currentSlideIndex} 
                 labelLeftBtn={labelLeftBtn} 
                 labelRightBtn={labelRightBtn} 
-                onPressLeftBtn={skip} 
+                // onPressLeftBtn={skip} 
+                onPressLeftBtn={goPreviousSlide}
                 onPressRightBtn={goNextSlide}
                 onPressStart={leaveWalkThrough} />
 

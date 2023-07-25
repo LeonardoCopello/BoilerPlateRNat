@@ -1,6 +1,11 @@
-import { Dimensions, StyleSheet, View } from "react-native"
-import { ISlideProps } from "../types/walkthrough"
-import { Button, Text, useTheme } from "@rneui/themed"
+import React from 'react'
+import { Dimensions, StyleSheet, View } from 'react-native'
+import { ISlideProps } from '../types/walkthrough'
+import { Button, Text, useTheme } from '@rneui/themed'
+import { TouchableOpacity } from 'react-native-gesture-handler'
+import { Col, Row, Grid } from 'react-native-easy-grid'
+import { ButtonSkip, ButtonWalkThrough } from './Buttons'
+
 
 
 const { width, height } = Dimensions.get('window')
@@ -19,24 +24,72 @@ interface IFooterProps {
 
 export const WalkthroughFooter = (props: IFooterProps) => {
     const { slides, slideBG, currentSlideIndex, labelColor, labelLeftBtn, labelRightBtn, onPressLeftBtn, onPressRightBtn, onPressStart } = props
+
+    const labelSkipBtn = () => {
+        if (slides.length === 0) {
+            return 'Voltar'
+        }
+        if (currentSlideIndex !== slides.length - 1) {
+            return 'Pular tutorial'
+        } else {
+            return 'Sair do Tutorial'
+        }
+    }
+
     return (
         <View style={{ height: height * 0.25, justifyContent: 'space-between', paddingHorizontal: 20, backgroundColor: slideBG }}>
-            <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 20 }}>
-               { slides.map((slide, index) => {
+            { slides.length > 1 && 
+            <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 10 }}>
+                { slides.map((slide, index) => {
                     return (
                         <View 
                             key={index} 
                             style={[
                                 styles.indicator,
                                 currentSlideIndex === index && {
-                                    backgroundColor: 'white',
+                                    backgroundColor: '#0F9347',
                                     width: 25
                                 }
                             ]} />
                     )
-               })}
+                })}
             </View>
-            <View style={{ marginBottom: 20}}>
+            }
+
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
+                <Grid style={{ 
+                    height: 100,
+                    marginBottom: 40,
+                    paddingLeft: 40,
+                    paddingRight: 40,
+                    // backgroundColor: 'yellow'
+                }}>
+                    <Row>
+                        <Col>
+                            { currentSlideIndex !== 0 && slides.length !== 0 &&
+                        <ButtonWalkThrough 
+                            label='< Retornar'
+                            onPress={onPressLeftBtn}/>
+                            }
+                        </Col>
+                        <Col style={{ alignItems: 'flex-end'}}>
+                            { currentSlideIndex !== slides.length - 1 && slides.length !== 0 &&
+                            <ButtonWalkThrough 
+                                label='Próximo >'
+                                onPress={onPressRightBtn}/>
+                            }
+                        </Col>
+                    </Row>
+                    <Row style={{ justifyContent: 'center'}}>
+                        <ButtonSkip 
+                            label={labelSkipBtn()}
+                            onPress={onPressStart}/>
+                    </Row>
+                </Grid>
+            </View>
+
+
+            {/* <View style={{ marginBottom: 20}}>
                 {
                     currentSlideIndex === slides.length - 1 ? (
                         <View style={{ height: 50}}>
@@ -68,7 +121,7 @@ export const WalkthroughFooter = (props: IFooterProps) => {
                     )
                 }
                 
-            </View>
+            </View> */}
         </View>
     )
 }
