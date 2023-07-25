@@ -12,7 +12,7 @@ export const App = () => {
 
     const { currentTheme } = useAppSelector(
         (state: RootState) => state.theme )
-    
+    // console.log('teste')
 
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
